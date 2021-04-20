@@ -1,4 +1,4 @@
-### Dedicated webworker util
+### Dedicated Webworker Util
 
 This util helps in executing tasks on dedicated worker thread in runtime with ease. Utilizes the string template literals to accept a function in string format. A JS file is created using this function to initialize the Worker thread.
 
