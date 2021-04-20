@@ -4,11 +4,18 @@ This util helps in executing tasks on dedicated worker thread in runtime with ea
 
 Every function spawns a new worker thread. Once the task is done the thread is destroyed.
 
+## Installation
+
+```sh
+npm install webworker-util
+```
+
 ## Examples
 
 Process objects/arrays in worker thread to reduce load on render thread.
 
 ```js
+import { worker } from "webworker-util";
 const me = { name: "lokesh", lname: "pathrabe" };
 const result = await worker`(function(person){
     return person.name.concat(person.lname)
@@ -19,26 +26,28 @@ console.log(result); // logs lokeshpathrabe
 make API calls in worker thread
 
 ```js
-  const result = await worker`(async function(){
-      const fetchData = new Promise((resolve) => {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-          resolve(xhttp.responseText);
-        }
-      };
-      xhttp.open("GET", "filename", true);
-      xhttp.send();
-    });
-    const data = await fetchData;
-    return data;
-  })()`;
+import { worker } from "webworker-util";
+const result = await worker`(async function(){
+    const fetchData = new Promise((resolve) => {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        resolve(xhttp.responseText);
+      }
+    };
+    xhttp.open("GET", "filename", true);
+    xhttp.send();
+  });
+  const data = await fetchData;
+  return data;
+})()`;
 });
 ```
 
 execute some code in setInterval. Since webworker threads are not affected by resource throttling done by browsers, they are perfect place to execute time sensitive operations
 
 ```js
+import { createIntervalWorker } from "webworker-util";
 const callback = jest.fn((v) => {
   console.log(v);
 });
