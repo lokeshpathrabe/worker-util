@@ -1,5 +1,12 @@
 import { worker } from "./..";
 
+it("Addition test", async () => {
+  const result = await worker`(function(a, b){
+    return a + b
+   })(8, 16)`;
+  expect(result).toEqual(24);
+});
+
 it("Object is parced in input", async () => {
   const me = { name: "lokesh", lname: "pathrabe" };
   const result = await worker`(function(person){
